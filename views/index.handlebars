@@ -1,15 +1,4 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <title>Mongo Scraper</title>
-</head>
-<body>
-            <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -19,14 +8,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Mongo Scraper</a>
+                <a class="navbar-brand" href="">Mongo Scraper</a>
                 </div>
             
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Saved Articles</a></li>
+                    <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                    <li><a href="/saved">Saved Articles</a></li>
+                    <li><a href="/scrape" class="btn btn-danger scrape-new">Scrape New Articles!</a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -40,13 +30,13 @@
                 <p>New York Times Edition</p>
             </div>    
         </div><!--jumbotron--> 
+
         <!--Articles div-->
         <div class="article-container">
+            {{msg}}
 
         </div> <!-- /.article-container -->  
  
     
     <!--Modal--> 
-    <script src="app.js"></script>
-</body>
-</html>
+   

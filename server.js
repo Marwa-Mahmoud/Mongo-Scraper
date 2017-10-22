@@ -24,8 +24,9 @@ app.set('view engine', 'handlebars');
 
 
 // Connect to the Mongo DB
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nyArticlesdb";
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/nyArticlesdb", {
+mongoose.connect(MONGODB_URI, {
   useMongoClient: true
 });
 

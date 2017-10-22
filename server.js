@@ -31,27 +31,33 @@ mongoose.connect("mongodb://localhost/nyArticlesdb", {
 
 ///require models
 var db = require("./models");
-
-////cheerio and request
-// const cheerio = require('cheerio')
-// const $ = cheerio.load('<h2 class="title">Hello world</h2>')
- 
-// $('h2.title').text('Hello there!')
-// $('h2').addClass('welcome')
- 
-// $.html()
 ////Routes////////////
+
+
 app.get('/', function (req, res) {
-    res.render('index');
+    db.Article.find()
+        .then(function(data){
+            res.render('index', {scrapedArticles: data});
+        })
+        .catch(function(err){
+            res.send(err);
+        })
+    
 });
 
 app.get('/saved', function (req, res) {
-    res.render('saved');
+    db.SavedArticle.find()
+    .then(function(data){
+        res.render('saved', {savedArticles: data});
+    })
+    .catch(function(err){
+        res.send(err);
+    })
 });
 
 app.get('/scrape', function (req, res) {
     
-    request("https://www.nytimes.com/", function(err, response, body){
+    request("http://www.nytimes.com/", function(err, response, body){
 
         var $ = cheerio.load(body)
         //article.story.story-heading.a, text --> title  
@@ -59,27 +65,42 @@ app.get('/scrape', function (req, res) {
         //article.story.summary
         var results = [];
 
+        //$("div.story").each(function(i, element){
         $("article.story").each(function(i, element){
             var result = {};
-            result.title = $(element).children("h2.story-heading").children("a").text();
-            result.link = $(element).children("h2.story-heading").children("a").attr("href");            
+            //result.title = $(element).children("h3").children("a").text();
+            result.title = $(element).children("h2").children("a").text();
+            
+            result.link = $(element).children("h2").children("a").attr("href");            
             result.summary= $(element).children("p.summary").text();
 
-            ////store each scraped article in mongodb Article
-            console.log(result);
-           results.push(result);
-        });
 
-        db.Article
-            .create(results)
-            .then(function(dbArticles){
-                res.json(dbArticles);
+            db.Article
+            .create(result)
+            .then(function(dbArticle) {
+              // If we were able to successfully scrape and save an Article, send a message to the client
+              //res.send("Scrape Complete");
             })
-            .catch(function(err){
-                res.send(err);
-            })
-    })
+            .catch(function(err) {
+              // If an error occurred, send it to the client
+              res.json(err);
+            });
+        });
+    });
 });
 
+app.post('/saved-articles', function(req, res){
+    console.log("===========line93:"+req.body.title);
+    db.SavedArticle
+    .create(req.body)
+    .then(function(dbArticle) {
+      res.redirect('/');
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+})
  
-app.listen(PORT);
+app.listen(PORT, function() {
+    console.log("App running on port " + PORT + "!");
+  });

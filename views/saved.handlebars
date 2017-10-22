@@ -14,8 +14,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="/">Home</a></li>
-                    <li><a href="/saved">Saved Articles<span class="sr-only">(current)</span></a></li>
+                    <li ><a href="/">Home</a></li>
+                    <li class="active"><a href="/saved">Saved Articles<span class="sr-only">(current)</span></a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -30,10 +30,20 @@
             </div>    
         </div><!--jumbotron--> 
 
-        <!--Articles div-->
-        <div class="article-container">
+        <!--Saved Articles div-->
+        <div class="saved-articles">
+            {{#each savedArticles}}
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <a href={{this.link}}>{{this.title}}</a>
+                        <button type="button" class="btn btn-success pull-right" id="btn-delete">Delete Article</button>
+                        <button type="button" class="btn btn-success pull-right" id="btn-note">Article Notes</button>
+                    </div>
+                    <div class="panel-body">{{this.summary}}</div>
+                </div>
+            {{/each}}
 
-        </div> <!-- /.article-container -->  
+        </div> <!-- /.saved-articles -->  
  
     
     <!--Modal--> 

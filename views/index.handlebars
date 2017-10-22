@@ -16,7 +16,7 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">Home <span class="sr-only">(current)</span></a></li>
                     <li><a href="/saved">Saved Articles</a></li>
-                    <li><a href="/scrape" class="btn btn-danger scrape-new">Scrape New Articles!</a></li>
+                    <li><a class="btn btn-danger" id="scrape-new">Scrape New Articles!</a></li>
                 </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -33,10 +33,33 @@
 
         <!--Articles div-->
         <div class="article-container">
-            {{msg}}
+            {{#each scrapedArticles}}
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <a href={{this.link}} id="title">{{this.title}}</a>
+                        <button type="button" class="btn btn-success pull-right" id="btn-save">Save</button>
+                    </div>
+                    <div class="panel-body summary" id="summary">{{this.summary}}</div>
+                </div>
+            {{/each}}
 
         </div> <!-- /.article-container -->  
  
     
-    <!--Modal--> 
+
+      <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <p id="new-articles-num"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
    

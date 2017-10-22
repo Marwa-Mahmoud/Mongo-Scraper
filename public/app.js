@@ -1,10 +1,3 @@
-// var pageReload = function(){
-//     //$(".article-container").empty();
-//     $.get('/home').done(function(data){
-//         console.log("page reload");
-//     })
-// }
-
 
 $('#scrape-new').on('click', function(event){
     $.getJSON('/scrape')
@@ -27,10 +20,8 @@ $(document).on("click", "#btn-save", function() {
           
         }
       })
-        // With that done
+   
         .done(function(data) {
-          // Log the response
-          //console.log(data);
          location.reload();
         });
 });
@@ -45,5 +36,30 @@ $(document).on("click", "#btn-article-delete", function() {
     
 })
 
-//pageReload();
+$(document).on("click", "#btn-article-note", function(event) {
+    
+    console.log("article note button pressed");
+    var thisId = $(this).siblings('input').attr("data-id");
+
+    $.get('/saved-notes/'+thisId)
+        .done(function(data){
+            console.log(data.note)
+            $('#article-notes').append(data.note)
+            $('#article-id').text(thisId)
+        })
+})
+
+$(document).on("click", "#btn-save-note", function() {
+    var thisId = $('#article-id').text();
+    var data = {body: $('#new-note').val()};
+
+    $.post('/saved-notes/'+thisId, data)
+        .done(function(data){
+            console.log(data);
+        })
+})
+
+
+
+
     

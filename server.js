@@ -31,9 +31,10 @@ mongoose.connect("mongodb://localhost/nyArticlesdb", {
 
 ///require models
 var db = require("./models");
+
 ////Routes////////////
 
-
+///Root gets all scraped articles
 app.get('/', function (req, res) {
     db.Article.find()
         .then(function(data){
@@ -45,7 +46,7 @@ app.get('/', function (req, res) {
     
 });
 
-
+///get all saved articles
 app.get('/saved', function (req, res) {
     db.SavedArticle.find()
     .then(function(data){
@@ -56,14 +57,13 @@ app.get('/saved', function (req, res) {
     })
 });
 
+//scrape articles and save them in the database
 app.get('/scrape', function (req, res) {
     
     request("http://www.nytimes.com/", function(err, response, body){
 
         var $ = cheerio.load(body)
-        //article.story.story-heading.a, text --> title  
-         //article.story.story-heading.a , href -->link 
-        //article.story.summary
+
         var results = [];
 
         //$("div.story").each(function(i, element){
@@ -79,11 +79,9 @@ app.get('/scrape', function (req, res) {
             db.Article
             .create(result)
             .then(function(dbArticle) {
-              // If we were able to successfully scrape and save an Article, send a message to the client
               res.send("Scrape Complete");
             })
             .catch(function(err) {
-              // If an error occurred, send it to the client
               res.json(err);
             });
         
@@ -91,6 +89,7 @@ app.get('/scrape', function (req, res) {
     });
 });
 
+///save selected article
 app.post('/saved-articles/:id', function(req, res){
     ///add article to the saved articles table
     db.SavedArticle
@@ -111,6 +110,7 @@ app.post('/saved-articles/:id', function(req, res){
     });
 })
 
+///delete save article
 app.get('/saved-articles/:id', function(req, res){
     db.SavedArticle
     .remove({_id: req.params.id})
@@ -120,6 +120,39 @@ app.get('/saved-articles/:id', function(req, res){
     .catch(function(err) {
       res.json(err);
     });
+})
+
+///get all notes of the selected article
+app.get('/saved-notes/:id', function(req, res){
+
+    db.SavedArticle
+    .findOne({ _id: req.params.id })
+    .populate("note")
+    .then(function(dbArticle) {
+        console.log(dbArticle);
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+})
+
+///add new note for the selected article
+app.post('/saved-notes/:id', function(req, res){
+
+    db.Note
+    .create(req.body)
+    .then(function(dbNote) {
+      return db.SavedArticle.findOneAndUpdate({ _id: req.params.id },
+        {$push: {note: dbNote._id }}, { new: true });
+    })
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+        res.json(err);
+    });
+    
 })
  
 app.listen(PORT, function() {

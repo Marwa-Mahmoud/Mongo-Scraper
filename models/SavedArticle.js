@@ -10,7 +10,11 @@ var SavedArticleSchema = new Schema({
         unique: true
     },
     link: String,
-    summary: String
+    summary: String,
+    note: [{
+        type: Schema.Types.ObjectId,
+        ref: "Note"
+      }]
 });
 
 var SavedArticle = mongoose.model("SavedArticle", SavedArticleSchema);

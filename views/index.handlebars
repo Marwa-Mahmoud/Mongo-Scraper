@@ -36,6 +36,7 @@
             {{#each scrapedArticles}}
                 <div class="panel panel-danger">
                     <div class="panel-heading">
+                        <input type="hidden" data-id={{this._id}}>
                         <a href={{this.link}} id="title">{{this.title}}</a>
                         <button type="button" class="btn btn-success pull-right" id="btn-save">Save</button>
                     </div>

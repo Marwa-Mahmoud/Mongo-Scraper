@@ -45,6 +45,7 @@ app.get('/', function (req, res) {
     
 });
 
+
 app.get('/saved', function (req, res) {
     db.SavedArticle.find()
     .then(function(data){
@@ -79,22 +80,42 @@ app.get('/scrape', function (req, res) {
             .create(result)
             .then(function(dbArticle) {
               // If we were able to successfully scrape and save an Article, send a message to the client
-              //res.send("Scrape Complete");
+              res.send("Scrape Complete");
             })
             .catch(function(err) {
               // If an error occurred, send it to the client
               res.json(err);
             });
+        
         });
     });
 });
 
-app.post('/saved-articles', function(req, res){
-    console.log("===========line93:"+req.body.title);
+app.post('/saved-articles/:id', function(req, res){
+    ///add article to the saved articles table
     db.SavedArticle
     .create(req.body)
     .then(function(dbArticle) {
-      res.redirect('/');
+        //remove article from the scraped articles table
+        db.Article
+        .remove({_id: req.params.id})
+        .then(function(data){
+            res.send('done');
+        })
+        .catch(function(err){
+            res.send(err);
+        })
+    })
+    .catch(function(err) {
+      res.json(err);
+    });
+})
+
+app.get('/saved-articles/:id', function(req, res){
+    db.SavedArticle
+    .remove({_id: req.params.id})
+    .then(function(dbArticle) {
+      res.send('done');
     })
     .catch(function(err) {
       res.json(err);

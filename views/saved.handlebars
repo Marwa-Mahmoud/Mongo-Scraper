@@ -35,9 +35,10 @@
             {{#each savedArticles}}
                 <div class="panel panel-danger">
                     <div class="panel-heading">
+                        <input type="hidden" data-id={{this._id}}>
                         <a href={{this.link}}>{{this.title}}</a>
-                        <button type="button" class="btn btn-success pull-right" id="btn-delete">Delete Article</button>
-                        <button type="button" class="btn btn-success pull-right" id="btn-note">Article Notes</button>
+                        <button type="button" class="btn btn-danger pull-right" id="btn-article-delete">Delete Article</button>
+                        <button type="button" class="btn btn-success pull-right" id="btn-article-note">Article Notes</button>
                     </div>
                     <div class="panel-body">{{this.summary}}</div>
                 </div>
